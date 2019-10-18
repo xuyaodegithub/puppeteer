@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer'),fs = require('fs');
-var allData=[],type=10,allPage=1,allTypeUrl=[],timer,timer1;
+var allData=[],type=20,allPage=1,allTypeUrl=[];
 async function test2() {
     const urls='https://pixabay.com/images/search';
     const browserArgs = [
@@ -18,6 +18,12 @@ async function test2() {
     //         interceptedRequest.continue();
     // });
     await page.goto(urls,{timeout:0});
+    await page.on('error',err=>{
+        fs.writeFile(`${__dirname}/dataJson/data${type}.json`,JSON.stringify(allData),async err=>{
+            if(err) console.log(err)
+            else console.log('奔溃后保存success')
+        })
+    })
     await page.waitForSelector('.media_filter',{timeout: 0});
     await page.click('.media_filter .menu:nth-child(7)');
     await page.waitForSelector('#cat_filter',{timeout: 0,visible:true});
@@ -52,6 +58,10 @@ async function  getDataList(page,browser,navigationPromise){
 }
 
 async function cilcBtn(page,browser,navigationPromise){
+    if([5,6,7,8,9].includes(type)){
+        type=10;
+        allData=[];
+    }
     await page.goto(allTypeUrl[type-1],{timeout:0});
     console.log(allTypeUrl[type-1],'___________')
     allPage=(await page.$eval('#paginator_clone form',el=>el.innerText)).replace(/\D/g,'')
