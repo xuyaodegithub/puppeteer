@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer'),fs = require('fs');
-var allData=[],type=20,allPage=1,allTypeUrl=[];
+var allData=[],type=14,allPage=1,allTypeUrl=[];
 async function test2() {
     const urls='https://pixabay.com/images/search';
     const browserArgs = [
@@ -63,7 +63,7 @@ async function cilcBtn(page,browser,navigationPromise){
         allData=[];
     }
     await page.goto(allTypeUrl[type-1],{timeout:0});
-    console.log(allTypeUrl[type-1],'___________')
+    console.log(allTypeUrl[type-1],'___________');
     allPage=(await page.$eval('#paginator_clone form',el=>el.innerText)).replace(/\D/g,'')
     await getDataList(page,browser,navigationPromise)
 }
