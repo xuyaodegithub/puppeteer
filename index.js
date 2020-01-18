@@ -112,13 +112,13 @@ function setJson(str){
 }
 
 async function initWindow(page){
-    await page.evaluate(utils.js1)
-    await page.evaluate(utils.js3)
-    await page.evaluate(utils.js4)
+    await page.evaluate(utils.js1);
+    await page.evaluate(utils.js3);
+    await page.evaluate(utils.js4);
     await page.evaluate(utils.js5)
 }
 async function initmove(page){
-    if(!page.$('#nc_1_n1z')) return true;
+    if(!await page.$('#nc_1_n1z')) return true;
     await page.hover('#nc_1_n1z')
     await page.mouse.down();
     await page.mouse.move(1498,0);
