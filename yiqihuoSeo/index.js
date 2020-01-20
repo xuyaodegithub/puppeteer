@@ -117,16 +117,21 @@ async function initclick(page, navigationPromise, browser) {
                     clearInterval( timer )
                     resolve()
                 }
-            }, Math.floor( Math.random() * (2000 - 1000 + 1) ) + 1000 )
+            }, 30 )
         } )
 
     } )
     scrollTimer2.then( async () => {
         const oA = await newPage.$$( '.footer_rp_flk .fl a' );
-        console.log(oA.length,'dede')
-        await oA[getrandom( 0, oA.length - 1 )].click();
-        await newPage.waitFor( getrandom( 2000, 5000 ) );
+        // console.log(oA.length,'dede')
+        // await oA[getrandom( 0, oA.length - 1 )].click();
+        // await newPage.waitFor( getrandom( 2000, 5000 ) );
+        // await newPage.close();
+        await matting(newPage,browser,`.footer_rp_flk .fl li:nth-child(${getrandom( 1, oA.length+1)}) a`)
         await newPage.close();
+        await matting(page,browser,'.xu_nav .margin > a:nth-child(7)')
+        await matting(page,browser,'.xu_nav .margin > a:last-child')
+
         // await initclick(page,navigationPromise,browser)
         await browser.close();
         currentChromeProcessNum--;
@@ -147,3 +152,15 @@ setInterval( () => {
         main()
     }, 300000 )
 }, 7200000 )
+async function matting(page,browser,str){
+    console.log(str)
+    //点击抠图
+    const matting1 = await page.$( str );
+    // const idx=parseInt(Math.random()*link.length)
+    const newPagePromise = new Promise( x => browser.once( 'targetcreated', target => x( target.page() ) ) );    // 声明变量
+    await matting1.click();                             // 点击跳转
+    const newPage1 = await newPagePromise;
+    await newPage1.waitFor(getrandom( 5000, 10000 ))
+    await newPage1.close();
+    //点击抠图2
+}
