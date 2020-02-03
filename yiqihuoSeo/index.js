@@ -117,7 +117,7 @@ async function initclick(page, navigationPromise, browser) {
                     clearInterval( timer )
                     resolve()
                 }
-            }, 30 )
+            }, Math.floor((Math.random()*5000))+3000 )
         } )
 
     } )
@@ -127,7 +127,7 @@ async function initclick(page, navigationPromise, browser) {
         // await oA[getrandom( 0, oA.length - 1 )].click();
         // await newPage.waitFor( getrandom( 2000, 5000 ) );
         // await newPage.close();
-        await matting(newPage,browser,`.footer_rp_flk .fl li:nth-child(${getrandom( 1, oA.length+1)}) a`)
+        await matting(newPage,browser,`.footer_rp_flk .fl li:nth-child(${getrandom( 2, oA.length)}) a`)
         await newPage.close();
         await matting(page,browser,'.xu_nav .margin > a:nth-child(7)')
         await matting(page,browser,'.xu_nav .margin > a:last-child')
@@ -153,7 +153,6 @@ setInterval( () => {
     }, 300000 )
 }, 7200000 )
 async function matting(page,browser,str){
-    console.log(str)
     //点击抠图
     const matting1 = await page.$( str );
     // const idx=parseInt(Math.random()*link.length)
