@@ -1,0 +1,7 @@
+{
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "excel-export": "^0.5.1",
+    "puppeteer": "^2.1.0"
+  }
+}

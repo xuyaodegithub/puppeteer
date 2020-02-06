@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer'),fs = require('fs'),  nodeExcel = require(
 let config={},allkeys=[29,30,33,41,47,53],oneList=[],twoList=[],threeList=[],oidx=0,tidx=0,thidx=0,swichs=1,fourTable=['rise','hot','conversion','new'],tabIdx=0;
 async function test2() {
     const urls='http://index.1688.com/alizs/keyword.htm?userType=purchaser&cat=10166,201158403,201156902';
-    const browser = await puppeteer.launch({executablePath:'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',headless:false,defaultViewport:{width:1920,height:1080},slowMo:50});
+    const browser = await puppeteer.launch({executablePath:'C:\\Users\\84527\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe',headless:false,defaultViewport:{width:1920,height:1080},slowMo:50});
     const page = await browser.newPage();
     await page.goto(urls,{timeout:0});
     const navigationPromise = page.waitForNavigation({timeout:0});

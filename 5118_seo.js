@@ -1,8 +1,8 @@
 const puppeteer = require('puppeteer'),fs = require('fs'),  nodeExcel = require('excel-export');
-let config={},page=1,seachUrl='www.17huo.com';
+let config={},page=1,seachUrl='www.17huo.com',dataArr=[];
 async function test2() {
     const urls='https://account.5118.com/account/login';
-    const browser = await puppeteer.launch({executablePath:'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',headless:false,defaultViewport:{width:1920,height:1080},slowMo:50});
+    const browser = await puppeteer.launch({/*executablePath:'C:\\Users\\84527\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe',*/headless:false,defaultViewport:{width:1920,height:1080},slowMo:50});
     const page = await browser.newPage();
     await page.goto(urls,{timeout:0});
     const navigationPromise = page.waitForNavigation({timeout:0});
@@ -52,6 +52,7 @@ async  function getData(page,navigationPromise){
     for(let i=0;i<oTr.length;i++){
         const arr= await oTr[i].$$eval('td',el=>el.map(els=>els.innerText))
         config.rows.push([arr[0],arr[1],arr[2],arr[4],arr[5],arr[6]])
+        dataArr.push(arr[0].trim())
     }
     const oPageNum=await page.$eval('.pagination li a.active',el=>(Number(el.innerText)+1))
     const acPage=(await page.$$eval('.pagination li a',el=>el.map(el=>el.innerText))).findIndex(item=>item==oPageNum)
@@ -60,7 +61,7 @@ async  function getData(page,navigationPromise){
         await pill(page,navigationPromise)
         }else{
             const result = nodeExcel.execute(config);// fs将文件写到内存
-            fs.writeFile(`${__dirname}/5118_seo.xlsx`,result,'binary',async (err)=>{
+            fs.writeFile(`${__dirname}/dataArr.json`,JSON.stringify(dataArr),'utf8',async (err)=>{
                 err ? console.log(err) : console.log('success')
                 // await browser.close()
             })
