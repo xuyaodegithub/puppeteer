@@ -12,7 +12,8 @@ async function main() {
         var options = {
             host: "dps.kdlapi.com",
             port: 80,
-            path: "/api/getdps/?orderid=977914332984052&num=1&pt=2&sep=4"
+            // path: "/api/getdps/?orderid=978392088801261&num=1&pt=2&sep=4"//1w
+            path: "/api/getdps/?orderid=988330455178145&num=1&pt=2&sep=4"//3000
             // http://xushengjing:kb0q85gz@ip:端口/
         };
         http.get( options, function (res) {
@@ -29,7 +30,7 @@ async function main() {
 }
 
 async function init(proxy) {
-    const userid = Math.floor( (Math.random() * 1000) );
+    const userid = Math.floor( (Math.random() * 5000) );
     // console.log(__dirname)
     const userDir = `D:/新建文件夹/userDir/${userid}/`;
     const browserArgs = [
@@ -39,12 +40,13 @@ async function init(proxy) {
         "--user-agent=Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
     ];
     const browser = await puppeteer.launch( {
-        headless: false,
+        // headless: false,
         defaultViewport: {width: 1920, height: 1080},
         slowMo: 50,
         args: browserArgs,
         userDataDir: userDir
     } )
+    setTimer(browser)
     // console.log(browserArgs)
     const page = await browser.newPage();
     const navigationPromise = page.waitForNavigation( {timeout: 0} )
@@ -117,7 +119,7 @@ async function initclick(page, navigationPromise, browser) {
                     clearInterval( timer )
                     resolve()
                 }
-            }, Math.floor((Math.random()*5000))+3000 )
+            }, Math.floor((Math.random()*1800))+1000 )
         } )
 
     } )
@@ -129,7 +131,7 @@ async function initclick(page, navigationPromise, browser) {
         // await newPage.close();
         await matting(newPage,browser,`.footer_rp_flk .fl li:nth-child(${getrandom( 2, oA.length)}) a`)
         await newPage.close();
-        await matting(page,browser,'.xu_nav .margin > a:nth-child(7)')
+        await matting(page,browser,'.xu_nav .margin > a:nth-child(6)')
         await matting(page,browser,'.xu_nav .margin > a:last-child')
 
         // await initclick(page,navigationPromise,browser)
@@ -145,13 +147,13 @@ function getrandom(min, max) {
 }
 
 setInterval( () => {
-    currentChromeProcessNum = 10
-    setTimeout( () => {
+    // currentChromeProcessNum = 10
+    // setTimeout( () => {
         currentChromeProcessNum = 0
         console.log('restore----------------------')
         main()
-    }, 300000 )
-}, 7200000 )
+    // }, 300000 )
+}, 600000 )
 async function matting(page,browser,str){
     //点击抠图
     const matting1 = await page.$( str );
@@ -159,7 +161,12 @@ async function matting(page,browser,str){
     const newPagePromise = new Promise( x => browser.once( 'targetcreated', target => x( target.page() ) ) );    // 声明变量
     await matting1.click();                             // 点击跳转
     const newPage1 = await newPagePromise;
-    await newPage1.waitFor(getrandom( 5000, 10000 ))
+    await newPage1.waitFor(getrandom( 10000, 15000 ))
     await newPage1.close();
     //点击抠图2
+}
+async function setTimer(browser){
+    setTimeout(()=>{
+        if(browser)browser.close()
+    },600000)
 }

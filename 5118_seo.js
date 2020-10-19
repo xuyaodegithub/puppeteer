@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer'),fs = require('fs'),  nodeExcel = require('excel-export');
-let config={},page=1,seachUrl='www.17huo.com',dataArr=[];
+let config={},page=1,seachUrl='m.17huo.com',dataArr=[];
 async function test2() {
     const urls='https://account.5118.com/account/login';
     const browser = await puppeteer.launch({/*executablePath:'C:\\Users\\84527\\AppData\\Local\\Google\\Chrome\\Application\\chrome.exe',*/headless:false,defaultViewport:{width:1920,height:1080},slowMo:50});
@@ -23,13 +23,13 @@ async function test2() {
     await page.waitForSelector('._5118-navigation',{timeout:0})
     await page.click('#navs li:first-child a');
     await navigationPromise
-    await page.waitForSelector('.flex-box .item:first-child .group:nth-child(3) input')
-    await page.focus('.flex-box .item:first-child .group:nth-child(3) input').then(async ()=>{
-        await page.keyboard.type('www.17huo.com');
+    await page.waitForSelector('.flex-box .item:first-child .group:nth-child(4) input')
+    await page.focus('.flex-box .item:first-child .group:nth-child(4) input').then(async ()=>{
+        await page.keyboard.type('m.17huo.com');
         // await page.keyboard.down('Enter')
         // await page.keyboard.up('Enter')
-    });
-    await page.goto(`https://www.5118.com/seo/baidupc/${seachUrl}`,{timeout:0})
+    });//https://www.5118.com/seo/baidupc/www.17huo.com
+    await page.goto(`https://www.5118.com/seo/baidumobile/${seachUrl}`,{timeout:0})
     await page.waitForSelector('table.list-table',{timeout:0})
     const oHrader=await page.$$eval('.list-header tr td',el=>el.map(el=>el.innerText))
     config.name='seo_Table'
@@ -52,7 +52,7 @@ async  function getData(page,navigationPromise){
     for(let i=0;i<oTr.length;i++){
         const arr= await oTr[i].$$eval('td',el=>el.map(els=>els.innerText))
         config.rows.push([arr[0],arr[1],arr[2],arr[4],arr[5],arr[6]])
-        dataArr.push(arr[0].trim())
+        dataArr.push({kw:arr[0].trim(),price:parseInt(arr[5])})
     }
     const oPageNum=await page.$eval('.pagination li a.active',el=>(Number(el.innerText)+1))
     const acPage=(await page.$$eval('.pagination li a',el=>el.map(el=>el.innerText))).findIndex(item=>item==oPageNum)
@@ -61,7 +61,7 @@ async  function getData(page,navigationPromise){
         await pill(page,navigationPromise)
         }else{
             const result = nodeExcel.execute(config);// fs将文件写到内存
-            fs.writeFile(`${__dirname}/dataArr.json`,JSON.stringify(dataArr),'utf8',async (err)=>{
+            fs.writeFile(`${__dirname}/dataArr3.json`,JSON.stringify(dataArr),'utf8',async (err)=>{
                 err ? console.log(err) : console.log('success')
                 // await browser.close()
             })

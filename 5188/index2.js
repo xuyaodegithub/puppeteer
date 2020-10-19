@@ -17,12 +17,13 @@ async function readfile(){
 async function main() {
     //获取代理ip
     //var api_url = "http://dps.kdlapi.com/api/getdps/?orderid=996816975895731&num=1&pt=2&sep=4";
-    var dataIdx=getrandom(0,300);
+    var dataIdx=getrandom(0,100);
     if (currentChromeProcessNum < maxChromeProcessNum) {
         currentChromeProcessNum++;
         var options = {
             host: "dps.kdlapi.com",
             port: 80,
+	//path: "/api/getdps/?orderid=978392088801261&num=1&pt=2&sep=4"//1w
             path: "/api/getdps/?orderid=988330455178145&num=1&pt=2&sep=4"//3000
             // path: "/api/getdps/?orderid=988184771100214&num=1&pt=2&sep=4"
             // http://xushengjing:kb0q85gz@ip:端口/
@@ -165,11 +166,6 @@ async  function noImage(page){//阻止图片加载
     } );
 }
 async function find17huo(page, navigationPromise, browser,dataIdx){
-    await navigationPromise.catch(async ()=>{
-        await browser.close()
-        currentChromeProcessNum--;
-        setTimeout( main, getrandom( 1000, 3000 ) );
-    })
     // let doscall = doScroll(page)
   let  allItem=await page.$$eval('#content_left > div',el=>el.map(item=>item.innerText));
     let idx=allItem.findIndex(item=>(item.includes('www.17huo.com') || item.includes('一起火') ));
@@ -185,16 +181,15 @@ async function find17huo(page, navigationPromise, browser,dataIdx){
         }
         await page.waitFor(500);
         await page.click(`#page > a:last-child`);
-        await page.waitFor(1000);
-        await find17huo(page, navigationPromise, browser,dataIdx)
-        // let timer=setInterval(async ()=>{
-        //     const otext=await page.$eval('#page strong ',el=> el.innerText);
-        //     console.log(+nowPage+1,otext)
-        //     if(+nowPage+1==otext){
-        //         clearInterval(timer)
-        //         await find17huo(page, navigationPromise, browser,dataIdx)
-        //     }
-        // },2000)
+        // await page.waitFor(500);
+        let timer=setInterval(async ()=>{
+            const otext=await page.$eval('#page strong ',el=> el.innerText);
+            console.log(+nowPage+1,otext)
+            if(+nowPage+1==otext){
+                clearInterval(timer)
+                await find17huo(page, navigationPromise, browser,dataIdx)
+            }
+        },2000)
     }else{
         // let twoPage=await page.$$(`#content_left .c-container .t a`);
         readfileAdd()
